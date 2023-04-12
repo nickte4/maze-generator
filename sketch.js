@@ -5,7 +5,9 @@ const cols = Math.floor(canvasWidth / gridWidth);
 const rows = Math.floor(canvasHeight / gridWidth);
 
 var grid = new Array(cols);
+var current; // current cell being visited
 
+// displays each grid space
 function displayGrid(grid, gridWidth) {
   for (var i = 0; i < cols; i++) {
     for (var j = 0; j < rows; j++) {
@@ -14,7 +16,39 @@ function displayGrid(grid, gridWidth) {
   }
 }
 
+// removes walls on cells depending on start to end traversal
+function removeWalls(current, next) {
+  let topIdx = 0,
+    rightIdx = 1,
+    bottomIdx = 2,
+    leftIdx = 3;
+
+  // if curr -> next
+  if (current.i - next.i == -1) {
+    current.walls[rightIdx] = false;
+    next.walls[leftIdx] = false;
+  }
+  // if next <- curr
+  if (current.i - next.i == 1) {
+    current.walls[leftIdx] = false;
+    next.walls[rightIdx] = false;
+  }
+  // if curr v next
+  if (current.j - next.j == -1) {
+    current.walls[bottomIdx] = false;
+    next.walls[topIdx] = false;
+  }
+  // if curr ^ next
+  if (current.j - next.j == 1) {
+    current.walls[topIdx] = false;
+    next.walls[bottomIdx] = false;
+  }
+}
+
 function setup() {
+  // frame rate of drawing
+  frameRate(3);
+
   // make 2-D array, col-row order
   for (var i = 0; i < cols; i++) {
     grid[i] = new Array(rows);
@@ -26,7 +60,9 @@ function setup() {
       grid[i][j] = new Cell(i, j);
     }
   }
-  console.log(grid);
+
+  // make first cell the current cell
+  current = grid[0][0];
 }
 
 function draw() {
@@ -34,5 +70,15 @@ function draw() {
   // color background grey
   background(51);
 
+  // display grid.
   displayGrid(grid, gridWidth);
+  current.visited = true;
+
+  // perform DFS algorithm to create maze
+  var next = current.checkNeighbors();
+  if (next) {
+    next.visited = true;
+    removeWalls(current, next);
+    current = next;
+  }
 }
