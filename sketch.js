@@ -1,11 +1,12 @@
 const canvasWidth = 400;
 const canvasHeight = 400;
-const gridWidth = 40;
+const gridWidth = 20;
 const cols = Math.floor(canvasWidth / gridWidth);
 const rows = Math.floor(canvasHeight / gridWidth);
 
 var grid = new Array(cols);
 var current; // current cell being visited
+var stack = [];
 
 // displays each grid space
 function displayGrid(grid, gridWidth) {
@@ -47,7 +48,7 @@ function removeWalls(current, next) {
 
 function setup() {
   // frame rate of drawing
-  frameRate(3);
+  //   frameRate(40);
 
   // make 2-D array, col-row order
   for (var i = 0; i < cols; i++) {
@@ -73,12 +74,19 @@ function draw() {
   // display grid.
   displayGrid(grid, gridWidth);
   current.visited = true;
+  current.highlight(gridWidth);
 
   // perform DFS algorithm to create maze
   var next = current.checkNeighbors();
   if (next) {
     next.visited = true;
+    stack.push(current);
     removeWalls(current, next);
     current = next;
+  } else if (stack.length > 0) {
+    current = stack.pop();
+  } else {
+    console.log("CREATED MAZE!");
+    noLoop();
   }
 }

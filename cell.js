@@ -57,4 +57,13 @@ class Cell {
       return null;
     }
   }
+
+  highlight(gridWidth) {
+    let w = gridWidth;
+    let x = this.i * w;
+    let y = this.j * w;
+    noStroke();
+    fill(0, 255, 0, 255);
+    rect(x, y, w, w);
+  }
 }
