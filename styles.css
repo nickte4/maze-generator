@@ -2,3 +2,13 @@
   margin: 0;
   padding: 0;
 }
+
+body {
+  display: flex;
+
+  /* This centers our sketch horizontally. */
+  justify-content: center;
+
+  /* This centers our sketch vertically. */
+  align-items: center;
+}

@@ -1,9 +1,11 @@
-const canvasWidth = 400;
-const canvasHeight = 400;
-const gridWidth = 20;
+const canvasWidth = 600;
+const canvasHeight = 600;
+const gridWidth = 40;
 const cols = Math.floor(canvasWidth / gridWidth);
 const rows = Math.floor(canvasHeight / gridWidth);
 
+var mazeStarted = false;
+var button;
 var grid = new Array(cols);
 var current; // current cell being visited
 var stack = [];
@@ -47,8 +49,14 @@ function removeWalls(current, next) {
 }
 
 function setup() {
-  // frame rate of drawing
-  //   frameRate(40);
+  // frameRate(40);
+
+  // style create maze button
+  button = createButton("Create maze");
+  button.size(150, 50);
+  button.style("background-color", color(50, 250, 150));
+  button.position(windowWidth / 2.2, canvasHeight + 20);
+  button.mousePressed(() => (mazeStarted = true));
 
   // make 2-D array, col-row order
   for (var i = 0; i < cols; i++) {
@@ -71,22 +79,26 @@ function draw() {
   // color background grey
   background(51);
 
-  // display grid.
-  displayGrid(grid, gridWidth);
-  current.visited = true;
-  current.highlight(gridWidth);
+  if (mazeStarted) {
+    // change button to light red
+    button.style("background-color", color(200, 150, 150));
+    // display grid.
+    displayGrid(grid, gridWidth);
+    current.visited = true;
+    current.highlight(gridWidth);
 
-  // perform DFS algorithm to create maze
-  var next = current.checkNeighbors();
-  if (next) {
-    next.visited = true;
-    stack.push(current);
-    removeWalls(current, next);
-    current = next;
-  } else if (stack.length > 0) {
-    current = stack.pop();
-  } else {
-    console.log("CREATED MAZE!");
-    noLoop();
+    // perform DFS algorithm to create maze
+    var next = current.checkNeighbors();
+    if (next) {
+      next.visited = true;
+      stack.push(current);
+      removeWalls(current, next);
+      current = next;
+    } else if (stack.length > 0) {
+      current = stack.pop();
+    } else {
+      console.log("CREATED MAZE!");
+      noLoop();
+    }
   }
 }
