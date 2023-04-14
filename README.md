@@ -12,7 +12,7 @@ A JavaScript project that implements depth-first search using recursive backtrac
 
 ## Scope
 
-The maze is generated using a depth-first search algorithm accompanied by recursive backtracking. For more info, check **Acknowledgments**.
+The maze is generated using a depth-first search algorithm accompanied by recursive backtracking. For more info, check [Acknowledgments](acknowledgments).
 
 ## Description
 
